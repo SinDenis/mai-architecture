@@ -5,6 +5,7 @@
 #ifndef HL_SERVER_USER_CACHE_H
 #define HL_SERVER_USER_CACHE_H
 
+#include <optional>
 #include "user.h"
 #include <Poco/JSON/Parser.h>
 #include "../common/database/cache.h"
