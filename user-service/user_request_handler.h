@@ -99,7 +99,6 @@ using Poco::Util::ServerApplication;
 #include <string>
 #include <fstream>
 #include <utility>
-#include <cppkafka/cppkafka.h>
 
 class UserRequestHandler : public HTTPRequestHandler {
 public:
@@ -176,7 +175,6 @@ private:
         User user = fromJSON(body_s.str());
         std::cout << user.id() << " " << user.login() << std::endl;
         user = userStorage::saveUser(user);
-        sendToKafka(user);
         Poco::JSON::Object::Ptr root = new Poco::JSON::Object();
         root->set("id", user.id());
         if (!user.login().empty()) root->set("login", user.login());
@@ -230,39 +228,6 @@ private:
         Poco::JSON::Stringifier::stringify(user.toJSON(), ostr);
     }
 
-    void sendToKafka(User& user) {
-        static cppkafka::Configuration config ={
-                {"metadata.broker.list", Config::get().queue_host()},
-                {"acks","all"}};
-        static cppkafka::Producer producer(config);
-        static std::mutex mtx;
-        static int message_key{0};
-        using Hdr = cppkafka::MessageBuilder::HeaderType;
-
-        std::lock_guard<std::mutex> lock(mtx);
-        std::stringstream ss;
-        Poco::JSON::Stringifier::stringify(user.toJSON(), ss);
-        std::string message = ss.str();
-        bool not_sent = true;
-
-        cppkafka::MessageBuilder builder(Config::get().queue_topic());
-        std::string mk=std::to_string(++message_key);
-        builder.key(mk); // set some key
-        builder.header(Hdr{"producer_type","author writer"}); // set some custom header
-        builder.payload(message); // set message
-
-        while (not_sent)
-        {
-            try
-            {
-                producer.produce(builder);
-                not_sent = false;
-            }
-            catch (...)
-            {
-            }
-        }
-    }
 };
 
 
