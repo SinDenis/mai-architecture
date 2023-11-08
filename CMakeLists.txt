@@ -13,7 +13,7 @@ set (CMAKE_CXX_FLAGS_RELEASE "-O3 -g0 -std=${STD_CXX} -Wall -DNDEBUG ${REDISCPP_
 find_package(OpenSSL)
 find_package(Threads)
 find_package(ZLIB)
-find_package(Poco REQUIRED COMPONENTS Foundation Net XML JSON Util Crypto NetSSL)
+find_package(Poco REQUIRED COMPONENTS Foundation Util Net XML JSON Crypto NetSSL)
 
 if(NOT ${Poco_FOUND})
     message(FATAL_ERROR "Poco C++ Libraries not found.")
@@ -24,16 +24,8 @@ include_directories("/usr/include/mysql")
 include_directories("/usr/local/include/mysql")
 link_directories("/usr/local/lib")
 
-#include_directories(${Poco_INCLUDE_DIRS})
-#include_directories("/usr/include/mysql")
-#include_directories("/usr/local/include/mysql")
-#include_directories("/opt/homebrew/Cellar/boost/1.83.0/include")
-#include_directories("/opt/homebrew/Cellar/mysql/8.1.0/include")
-#include_directories("/opt/homebrew/Cellar/librdkafka/2.3.0/include")
-#link_directories("/opt/homebrew/Cellar/boost/1.83.0/lib")
-#link_directories("/opt/homebrew/Cellar/mysql/8.1.0/lib")
-#link_directories("/opt/homebrew/Cellar/librdkafka/2.3.0/lib")
-#link_directories("/usr/local/lib")
+SET(CMAKE_CXX_STANDARD 17)
+SET(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable(${USER_SERVICE}
         user-service/main.cpp
@@ -43,21 +35,19 @@ add_executable(${USER_SERVICE}
         common/utils/auth.h
         common/utils/request.h
 )
-
-
 target_include_directories(${USER_SERVICE} PRIVATE "${CMAKE_BINARY_DIR}")
 target_compile_options(${USER_SERVICE} PRIVATE -Wall -Wextra -pedantic -Werror )
 set_target_properties(${USER_SERVICE} PROPERTIES LINKER_LANGUAGE CXX)
 set_target_properties(${USER_SERVICE} PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
 
 target_link_libraries(${USER_SERVICE} PRIVATE
-                             ${CMAKE_THREAD_LIBS_INIT}
-                             ${Poco_LIBRARIES}
-                             "PocoData"
-                             "PocoDataMySQL"
-                             "mysqlclient"
-                             ZLIB::ZLIB)
-
+        ${CMAKE_THREAD_LIBS_INIT}
+        ${Poco_LIBRARIES}
+        "PocoData"
+        "PocoJWT"
+        "PocoDataMySQL"
+        "mysqlclient"
+        ZLIB::ZLIB)
 
 add_executable(${POST_SERVICE}
         common/config/config.cpp
@@ -92,11 +82,11 @@ add_executable(${CHAT_SERVICE}
         chat-service/message_db.h
         common/utils/request.h
 )
-
 target_include_directories(${CHAT_SERVICE} PRIVATE "${CMAKE_BINARY_DIR}")
 target_compile_options(${CHAT_SERVICE} PRIVATE -Wall -Wextra -pedantic -Werror )
 set_target_properties(${CHAT_SERVICE} PROPERTIES LINKER_LANGUAGE CXX)
 set_target_properties(${CHAT_SERVICE} PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
+
 target_link_libraries(${CHAT_SERVICE} PRIVATE
         ${CMAKE_THREAD_LIBS_INIT}
         ${Poco_LIBRARIES}
@@ -104,16 +94,3 @@ target_link_libraries(${CHAT_SERVICE} PRIVATE
         "PocoDataMySQL"
         "mysqlclient"
         ZLIB::ZLIB)
-
-add_executable("user-consumer"
-        user-consumer/main.cpp
-        user-consumer/main.h
-        user-service/user_storage.h
-        common/config/config.cpp)
-
-target_link_libraries(user-consumer PRIVATE
-        ${CMAKE_THREAD_LIBS_INIT}
-        ${Poco_LIBRARIES}
-        "PocoDataMySQL"
-        "rdkafka++"
-        CppKafka::cppkafka)
