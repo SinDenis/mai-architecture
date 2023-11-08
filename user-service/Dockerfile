@@ -8,4 +8,4 @@ RUN git clone https://github.com/mfontanini/cppkafka && cd cppkafka && mkdir bui
 RUN sudo ldconfig
 RUN git clone https://github.com/SinDenis/mai-architecture.git && cd ./mai-architecture
 RUN cd mai-architecture && mkdir build && cd build && cmake  .. && make user-service
-ENTRYPOINT [ "mai-architecture/build/user_service" ]
+ENTRYPOINT [ "mai-architecture/build/user-service" ]
