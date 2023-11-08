@@ -28,7 +28,7 @@ SET(CMAKE_CXX_STANDARD 17)
 SET(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable(${USER_SERVICE}
-        user-service/main.cpp
+        user-service.cpp
         common/config/config.cpp
         common/database/cache.cpp
         common/database/database.cpp
