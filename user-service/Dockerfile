@@ -6,6 +6,6 @@ RUN git clone -b master https://github.com/pocoproject/poco.git && cd poco && mk
 RUN git clone https://github.com/tdv/redis-cpp.git && cd redis-cpp && mkdir build && cd build && cmake .. && make && sudo make install && cd .. && cd ..
 RUN git clone https://github.com/mfontanini/cppkafka && cd cppkafka && mkdir build && cd build && cmake .. && make && sudo make install && cd .. && cd ..
 RUN sudo ldconfig
-RUN git clone https://github.com/SinDenis/mai-architecture.git architecture_mai
-RUN cd architecture_mai && mkdir build && cd build && cmake  .. && make user-service
-ENTRYPOINT [ "architecture_mai/build/user_service" ]
+RUN git clone https://github.com/SinDenis/mai-architecture.git && cd ./mai-architecture
+RUN cd mai-architecture && mkdir build && cd build && cmake  .. && make user-service
+ENTRYPOINT [ "mai-architecture/build/user_service" ]

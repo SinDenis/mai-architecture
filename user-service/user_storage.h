@@ -5,6 +5,7 @@
 #ifndef HL_SERVER_USER_STORAGE_H
 #define HL_SERVER_USER_STORAGE_H
 
+#include <optional>
 #include "user_cache.h"
 #include "user_db.h"
 
