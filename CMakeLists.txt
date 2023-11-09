@@ -14,7 +14,7 @@ set (CMAKE_CXX_FLAGS_RELEASE "-O3 -g0 -std=${STD_CXX} -Wall -DNDEBUG ${REDISCPP_
 find_package(OpenSSL)
 find_package(Threads)
 find_package(ZLIB)
-find_package(Poco REQUIRED COMPONENTS Foundation Net Util XML JSON Crypto NetSSL)
+find_package(Poco REQUIRED COMPONENTS Foundation Net XML JSON Util Crypto NetSSL)
 
 if(NOT ${Poco_FOUND})
     message(FATAL_ERROR "Poco C++ Libraries not found.")
