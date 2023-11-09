@@ -104,7 +104,7 @@ services:
       - arch-network
     ports:
       # Mysql Client Port
-      - 6033:6033
+      - "6033:6033"
       # Mysql Admin Port
       - "6032:6032"
 
@@ -180,6 +180,28 @@ services:
     networks:
       - arch-network
 
+  user_service:
+    build:
+      context: ./
+      dockerfile: ./user-service/Dockerfile
+    container_name: user_service
+    environment:
+      - DB_HOST=proxysql
+      - DB_PORT=6033
+      - DB_LOGIN=stud
+      - DB_PASSWORD=stud
+      - DB_DATABASE=social
+      - CACHE=cache:6379
+      - WEB_SERVER_PORT=8080
+    ports:
+      - "8080:8080"
+    networks:
+      - arch-network
+    depends_on:
+      db_node_01:
+        condition: service_healthy
+      cache:
+        condition: service_started
 
 volumes:
   db-node-01-data:

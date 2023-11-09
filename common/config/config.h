@@ -14,10 +14,6 @@ private:
     std::string _database;
     std::string _cache_servers;
 
-    std::string _queue_host;
-    std::string _queue_topic;
-    std::string _queue_group_id;
-
 public:
     static Config &get();
 
@@ -33,11 +29,6 @@ public:
 
     std::string &cache_servers();
 
-    std::string &queue_host();
-
-    std::string &queue_topic();
-
-    std::string &queue_group_id();
 };
 
 #endif

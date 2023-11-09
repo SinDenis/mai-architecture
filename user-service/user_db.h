@@ -32,6 +32,7 @@ namespace userDb {
     }
 
     User save(User &user) {
+        std::cout << "hi" << std::endl;
         user.id() = nextUserId();
         database::Database::query([&user](Statement insert) {
             insert << INSERT_POST_SQL << database::Database::getShardingHint(user.id()),
