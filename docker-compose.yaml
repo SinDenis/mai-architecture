@@ -198,8 +198,6 @@ services:
     networks:
       - arch-network
     depends_on:
-      db_node_01:
-        condition: service_healthy
       cache:
         condition: service_started
 

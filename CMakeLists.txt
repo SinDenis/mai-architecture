@@ -53,7 +53,7 @@ add_executable(${POST_SERVICE}
         common/config/config.cpp
         common/database/database.cpp
         common/utils/auth.h
-        post-service/main.cpp
+        post-service.cpp
         post-service/post_request_handler.h
         post-service/post.h
         post-service/post_db.h
@@ -76,7 +76,7 @@ add_executable(${CHAT_SERVICE}
         common/config/config.cpp
         common/database/database.cpp
         common/utils/auth.h
-        chat-service/main.cpp
+        chat-service.cpp
         chat-service/message_request_handler.h
         chat-service/message.h
         chat-service/message_db.h
